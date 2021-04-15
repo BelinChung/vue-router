@@ -23,12 +23,14 @@ export const supportsPushState =
   })()
 
 export function pushState (url?: string, replace?: boolean) {
+  if (url.indexOf(window.__QIANKUN_ROUTE_PATH__) < 0) return false
+
   saveScrollPosition()
   // try...catch the pushState call to get around Safari
   // DOM Exception 18 where it limits to 100 pushState calls
   const history = window.history
   try {
-    if (replace || window.__POWERED_BY_QIANKUN__) {
+    if (replace) {
       // preserve existing history state as it could be overriden by the user
       const stateCopy = extend({}, history.state)
       stateCopy.key = getStateKey()

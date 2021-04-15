@@ -1,5 +1,5 @@
 /*!
-  * vue-router v3.5.3
+  * vue-router v3.5.4
   * (c) 2021 Evan You
   * @license MIT
   */
@@ -1977,12 +1977,14 @@
     })();
 
   function pushState (url, replace) {
+    if (url.indexOf(window.__QIANKUN_ROUTE_PATH__) < 0) { return false }
+
     saveScrollPosition();
     // try...catch the pushState call to get around Safari
     // DOM Exception 18 where it limits to 100 pushState calls
     var history = window.history;
     try {
-      if (replace || window.__POWERED_BY_QIANKUN__) {
+      if (replace) {
         // preserve existing history state as it could be overriden by the user
         var stateCopy = extend({}, history.state);
         stateCopy.key = getStateKey();
@@ -3132,7 +3134,7 @@
   }
 
   VueRouter.install = install;
-  VueRouter.version = '3.5.3';
+  VueRouter.version = '3.5.4';
   VueRouter.isNavigationFailure = isNavigationFailure;
   VueRouter.NavigationFailureType = NavigationFailureType;
   VueRouter.START_LOCATION = START;
