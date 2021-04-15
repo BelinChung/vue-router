@@ -1,5 +1,5 @@
 /*!
-  * vue-router v3.5.2
+  * vue-router v3.5.3
   * (c) 2021 Evan You
   * @license MIT
   */
@@ -1976,13 +1976,13 @@ function pushState (url, replace) {
   // DOM Exception 18 where it limits to 100 pushState calls
   var history = window.history;
   try {
-    var stateCopy = extend({}, history.state);
-    if (replace) {
+    if (replace || window.__POWERED_BY_QIANKUN__) {
       // preserve existing history state as it could be overriden by the user
+      var stateCopy = extend({}, history.state);
       stateCopy.key = getStateKey();
       history.replaceState(stateCopy, '', url);
     } else {
-      history.pushState(Object.assign({}, stateCopy, { key: setStateKey(genStateKey()) }), '', url);
+      history.pushState({ key: setStateKey(genStateKey()) }, '', url);
     }
   } catch (e) {
     window.location[replace ? 'replace' : 'assign'](url);
@@ -3126,7 +3126,7 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '3.5.2';
+VueRouter.version = '3.5.3';
 VueRouter.isNavigationFailure = isNavigationFailure;
 VueRouter.NavigationFailureType = NavigationFailureType;
 VueRouter.START_LOCATION = START;

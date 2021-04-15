@@ -28,13 +28,13 @@ export function pushState (url?: string, replace?: boolean) {
   // DOM Exception 18 where it limits to 100 pushState calls
   const history = window.history
   try {
-    const stateCopy = extend({}, history.state)
-    if (replace) {
+    if (replace || window.__POWERED_BY_QIANKUN__) {
       // preserve existing history state as it could be overriden by the user
+      const stateCopy = extend({}, history.state)
       stateCopy.key = getStateKey()
       history.replaceState(stateCopy, '', url)
     } else {
-      history.pushState(Object.assign({}, stateCopy, { key: setStateKey(genStateKey()) }), '', url)
+      history.pushState({ key: setStateKey(genStateKey()) }, '', url)
     }
   } catch (e) {
     window.location[replace ? 'replace' : 'assign'](url)
